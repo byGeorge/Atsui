@@ -1,8 +1,8 @@
-﻿using Atsui.Models.Research;
+﻿using Atsui.Models;
 
 namespace Atsui.Controllers.DbControllers
 {
-    public interface IResearchController
+    public interface IDBController
     {
         public List<Technology> GetTechnologies();
     }

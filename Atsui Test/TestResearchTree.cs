@@ -1,5 +1,5 @@
 ﻿using Atsui.Controllers.DbControllers;
-using Atsui.Models.Research;
+using Atsui.Models;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Atsui_Test
 {
-    public class TestResearchController
+    public class TestResearchTree
     {
         List<Technology>[] technologies;
         string[] controllers;
         [SetUp] 
         public void Setup() {
             technologies = new List<Technology>[1];
-            IResearchController mock = new MockResearchController();
+            IDBController mock = new MockDBController();
             technologies[0] = mock.GetTechnologies();
             controllers = new string[1];
             controllers[0] = "MockResearchController";
@@ -80,7 +80,56 @@ namespace Atsui_Test
                 foreach(Technology tech in technologies[i])
                 {
                     Assert.That(checkTree(new List<Technology>(), tech), 
-                        "Circular research reference found in " + controllers[i]);
+                        "Circular research reference found in " + controllers[i] + "for " + tech.Name);
+                }
+            }
+        }
+
+        [Test]
+        public void CanResearchChecksRequirements()
+        {
+            for (var i = 0; i < technologies.Length; i++)
+            {
+                foreach(Technology tech in technologies[i])
+                {
+                    if (tech.CanResearch())
+                    {
+                        //parent technology must be researched before child technologies
+                        foreach(Technology parent in tech.Parents)
+                        {
+                            Assert.That(parent.HasResearched, "Technology " + tech.Name + " has an " +
+                                "unresearched parent");
+                        }
+                        // prerequisite milestones must also be achieved
+                        foreach(Milestone milestone in tech.MilestonesRequired)
+                        {
+                            Assert.That(milestone.HasAchieved, "Technology " + tech.Name + " has an " +
+                                "unresearched milestone");
+                        }
+                    }
+                    else
+                    {
+                        // one of the prerequisites should not be met
+                        bool meetsRequiremets = true;
+                        foreach (Technology parent in tech.Parents)
+                        {
+                            if (!parent.HasResearched)
+                            {
+                                meetsRequiremets = false;
+                            }
+                        }
+
+                        foreach (Milestone milestone in tech.MilestonesRequired)
+                        {
+                            if (!milestone.HasAchieved)
+                            {
+                                meetsRequiremets = false;
+                            }
+                        }
+
+                        Assert.That(!meetsRequiremets, "Technology " + tech.Name + " meets requirements " +
+                            "but cannot be researched");
+                    }
                 }
             }
         }
