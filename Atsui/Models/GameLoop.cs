@@ -2,46 +2,10 @@
 {
     public static class GameLoop
     {
+        private static int _gameTimeElapsed = 0;
+        private static int _loopTime = 6;
         // States: 0 = stopped, 1 = running, 2 = starting, 3 = stopping, 4 = never started, 5 = paused
         public static int state = 4;
-        private static int _loopTime = 6;
-        private static int _gameTimeElapsed = 0;
-
-        public static bool Start()
-        {
-            state = 2;
-            // TODO: startup code goes here
-            gameLoop();
-            return true;
-        }
-
-        public static bool Pause()
-        {
-            state = 5;
-            return true;
-        }
-
-        public static bool Resume()
-        {
-            state = 1;
-            return true;
-        }
-
-        public static bool Stop()
-        {
-            state = 3;
-            //TODO: teardown code goes here
-            Unload();
-            //TODO: close connections here
-            return state == 0;
-        }
-
-        public static void Unload()
-        {
-            // wait for loop to finish
-            Thread.Sleep(_loopTime * 4);
-            // TODO: async teardown code goes here
-        }
 
         private static async void gameLoop()
         {
@@ -60,7 +24,12 @@
                 {
                     state = 0; // stopped
                 }
-            } while(state != 0);
+            } while (state != 0);
+        }
+
+        public static int GetGameTimeElapsed()
+        {
+            return _gameTimeElapsed;
         }
 
         public static String GetState()
@@ -73,7 +42,7 @@
                 case 1:
                     return "Running";
 
-                case 2: 
+                case 2:
                     return "Starting";
 
                 case 3:
@@ -90,9 +59,40 @@
             }
         }
 
-        public static int GetGameTimeElapsed()
+        public static bool Pause()
         {
-            return _gameTimeElapsed;
+            state = 5;
+            return true;
+        }
+
+        public static bool Resume()
+        {
+            state = 1;
+            return true;
+        }
+
+        public static bool Start()
+        {
+            state = 2;
+            // TODO: startup code goes here
+            gameLoop();
+            return true;
+        }
+
+        public static bool Stop()
+        {
+            state = 3;
+            //TODO: teardown code goes here
+            Unload();
+            //TODO: close connections here
+            return state == 0;
+        }
+
+        public static void Unload()
+        {
+            // wait for loop to finish
+            Thread.Sleep(_loopTime * 4);
+            // TODO: async teardown code goes here
         }
     }
 }

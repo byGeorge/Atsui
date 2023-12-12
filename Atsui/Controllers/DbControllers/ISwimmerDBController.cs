@@ -2,8 +2,9 @@
 
 namespace Atsui.Controllers.DbControllers
 {
-    public interface IDBController
+    public interface ISwimmerDBController
     {
         public List<Technology> GetTechnologies();
+        public int GetID();
     }
 }

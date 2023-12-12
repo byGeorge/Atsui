@@ -4,12 +4,10 @@ namespace Atsui.Models.Structures
 {
     public interface IStructure
     {
-        public string Name { get; }
-        public string Description { get; }
-        public int ID { get; }
+        public IItem Item { get; }
         public int BuildTime { get; }
         public int StorageCapacity { get; }
-        public string Type { get; }
+        public string StructureType { get; }
         public double WeightCapacity { get; }
 
     }

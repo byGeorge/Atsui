@@ -2,13 +2,11 @@
 {
     public class Milestone
     {
-        public string Name { get; }
-        public string Description { get; }
+        public IItem Item { get; }
         public bool HasAchieved { get; set; }
-        public Milestone(string name, string description, bool hasAchieved)
+        public Milestone(IItem item, bool hasAchieved)
         {
-            Name = name;
-            Description = description;
+            Item = item;
             HasAchieved = hasAchieved;
 
         }

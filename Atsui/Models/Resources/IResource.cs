@@ -2,9 +2,8 @@
 {
     public interface IResource
     {
-        public string Name { get; }
-        public string Description { get; }
-        //Key: LocationId, Value: quantity
+        public IItem Item { get; set; }
+        //Key: LocationId (foreign key), Value: quantity
         public Dictionary<int, int> LocationId { get; set; }
         // i.e. "Liquid" "Personnel" "Adult" "Livestock" etc
         public List<string> Qualities { get; }

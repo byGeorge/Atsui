@@ -17,7 +17,7 @@ namespace Atsui_Test
         [SetUp] 
         public void Setup() {
             technologies = new List<Technology>[1];
-            IDBController mock = new MockDBController();
+            ISwimmerDBController mock = new MockDBController();
             technologies[0] = mock.GetTechnologies();
             controllers = new string[1];
             controllers[0] = "MockResearchController";

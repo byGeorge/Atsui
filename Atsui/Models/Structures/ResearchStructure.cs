@@ -2,21 +2,19 @@
 {
     public class ResearchStructure : IStructure
     {
-        public string Name { get; set; }
-        public string Description { get; }
-        public int ID { get; }
+        public IItem Item { get; }
+        public string ItemType { get; }
         public int BuildTime { get; }
         public int StorageCapacity { get; private set; }
-        public string Type { get; }
+        public string StructureType { get; }
         public double WeightCapacity { get; private set; }
-        public ResearchStructure(string name, string description, int id, int buildTime, int storageCapacity, 
+        public ResearchStructure(IItem item, int buildTime, int storageCapacity, 
             double weightCapacity)
         {
-            Name = name;
-            Description = description;
-            ID = id;
+            Item = item;
+            ItemType = "Structure";
             BuildTime = buildTime;
-            Type = "Research";
+            StructureType = "Research";
             StorageCapacity = storageCapacity;
             WeightCapacity = weightCapacity;
         }

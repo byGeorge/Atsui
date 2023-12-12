@@ -1,26 +1,27 @@
 ﻿using Atsui.Models;
+using Atsui.Models.Resources;
 
 namespace Atsui.Controllers.DbControllers
 {
-    public class MockDBController : IDBController
+    public class MockSwimmerDBController : ISwimmerDBController
     {
-        public MockDBController() { }
+        public MockSwimmerDBController() { }
 
         public List<Technology> GetTechnologies()
         {
             Technology one = new Technology("one", "Is it a lonely number because it's" +
-                "unimaginative?", true, true, 10, true, new List<Technology>(),
-                new List<Milestone>());
+                "unimaginative?", 0, true, true, true, new List<Milestone>(), new List<Technology>(),
+                1, new List<IResource>());
             Technology two = new Technology("two", "The Twoth fairy is less horrifying " +
-                "than the threeth fairy",true, false, 1, false, new List<Technology>(),
-                new List<Milestone>());
-            Technology three = new Technology("three", "Beware. BEWARE!", true,
-                false, 1, false, new List<Technology>(), new List<Milestone>());
+                "than the threeth fairy",1, false, false, false, new List<Milestone>(),
+                new List<Technology>(), 10, new List<IResource>());
+            Technology three = new Technology("three", "Beware. BEWAAAARE!", 2, true,
+                false, false, new List<Milestone>(), new List<Technology>(), 10, new List<IResource>());
             Technology four = new Technology("four", "We Go! by Hiroshi Kitadani is " +
-                "adorable.", false, false, 1, false, new List<Technology>(),
-                new List<Milestone>());
+                "adorable.", 3, false, false, false, new List<Milestone>(),
+                new List<Technology>(), 10, new List<IResource>());
             Technology five = new Technology("five", "Even Eris would acknowledge that five " +
-                "is just another number.", true, false, 1, false, new List<Technology>(),
+                "is just another number.", 4, true, false, 1, false, new List<Technology>(),
                 new List<Milestone>());
             Technology six = new Technology("six", "Still just a number, even when repeated " +
                 "thrice.", true, false, 1, true, new List<Technology>(), new List<Milestone>());
