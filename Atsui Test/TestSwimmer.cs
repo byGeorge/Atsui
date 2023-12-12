@@ -1,4 +1,5 @@
-﻿using Atsui.Models;
+﻿using Atsui.Controllers.DbControllers;
+using Atsui.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Atsui_Test
         public void InitialGameTimeIsAccurate()
         {
             Thread.Sleep(1000);
-            Swimmer swimmer = new Swimmer("Swim1");
+            Swimmer swimmer = new Swimmer("Swim1", "Testing... testing... annnyyybooddddyyyyyy???", new MockSwimmerDBController());
             int startTime = swimmer.StartTime;
             Assert.That(startTime > 0, "Initial GameTime is " + startTime);
             Assert.That(startTime >= 1000 && startTime <= 2000, 
@@ -35,7 +36,7 @@ namespace Atsui_Test
         [Test]
         public void TimePlayedIsAccurate()
         {
-            Swimmer swimmer = new Swimmer("Swim1");
+            Swimmer swimmer = new Swimmer("Swim1", "Testing... testing... annnyyybooddddyyyyyy???", new MockSwimmerDBController());
             int startTime = swimmer.StartTime;
             Thread.Sleep(1000);
             int played = swimmer.GetTimePlayed();

@@ -42,66 +42,66 @@ namespace Atsui.Controllers.DbControllers
                 new List<Technology>(), 10, new List<IResource>());
             Technology ten = new Technology("ten", "It's 2 in binary!", 10, true, true,
                 true, new List<Milestone>(), new List<Technology>() { one }, 100, new List<IResource>());
-            Technology eleven = new Technology("eleven", "Super cool kid", 
-                true, false, 10, false, new List<Technology>() { two, three },
-                new List<Milestone>());
+            Technology eleven = new Technology("eleven", "Super cool kid", 11, 
+                true, false, false, new List<Milestone>(), new List<Technology>() { two, three },
+                100, new List<IResource>());
             Technology twelve = new Technology("twelve", "I love the word \"puerile\" because " +
-                "it comes from puer (pronounced \"poo-er\"), the Latin word for \"boy.\"", true,
-                false, 10, false, new List<Technology> { four, five, six },
-                new List<Milestone>());
+                "it comes from puer (pronounced \"poo-er\"), the Latin word for \"boy.\"", 12, true,
+                false, false, new List<Milestone>(), new List<Technology> { four, five, six }, 100,
+                new List<IResource>());
             Technology thirteen = new Technology("thirteen", "Still just a number, but I'm " +
-                "fond of it.", true, false, 10, false, new List<Technology>() { six, seven },
-                new List<Milestone>());
-            Technology fourteen = new Technology("fourteen", "Ten four, good buddy!", true,
-                false, 10, false, new List<Technology>() { seven, eight },
-                new List<Milestone>());
-            Technology fifteen = new Technology("fifteen", "Aww, she's all grown up now.",
-                false, false, 10, false, new List<Technology>() { nine },
-                new List<Milestone>());
-            Technology sixteen = new Technology("sixteen", "How many candles down the drain?",
-                false, false, 100, false, new List<Technology>() { ten },
-                new List<Milestone>());
-            Technology seventeen = new Technology("seventeen", "Not an adult yet.", false,
-                false, 100, false, new List<Technology>() { eleven, twelve },
-                new List<Milestone>());
-            Technology eighteen = new Technology("eighteen", "Seems arbitrary to me.", false,
-                false, 100, false, new List<Technology>() { twelve, thirteen, fourteen },
-                new List<Milestone>());
-            Technology nineteen = new Technology("nineteen", "Highest teen possible.",
-                false, false, 100, false, new List<Technology>() { nine, fourteen, fifteen },
-                new List<Milestone>());
+                "fond of it.", 13, true, false, false, new List<Milestone>(), 
+                new List<Technology>() { six, seven }, 100, new List<IResource>());
+            Technology fourteen = new Technology("fourteen", "Ten four, good buddy!", 14, true,
+                false, false, new List<Milestone>(), new List<Technology>() { seven, eight }, 100,
+                new List<IResource>());
+            Technology fifteen = new Technology("fifteen", "Aww, she's all grown up now.", 15,
+                false, false, false, new List<Milestone>(), new List<Technology>() { nine }, 100,
+                new List<IResource>());
+            Technology sixteen = new Technology("sixteen", "How many candles down the drain?", 16,
+                false, false, false, new List<Milestone>(), new List<Technology>() { ten }, 200,
+                new List<IResource>());
+            Technology seventeen = new Technology("seventeen", "Not an adult yet.", 17, false,
+                false, false, new List<Milestone>(), new List<Technology>() { eleven, twelve }, 200,
+                new List<IResource>());
+            Technology eighteen = new Technology("eighteen", "Seems arbitrary to me.", 18, false,
+                false, false, new List<Milestone>(), new List<Technology>() { twelve, thirteen, fourteen },
+                200, new List<IResource>());
+            Technology nineteen = new Technology("nineteen", "Highest teen possible.", 19,
+                false, false, false, new List<Milestone>(), new List<Technology>() { nine, fourteen, fifteen },
+                200, new List<IResource>());
             Technology twenty = new Technology("twenty", "This is where our numbering system " +
-                "becomes more logical.", false, false, 200, false, new List<Technology>() { sixteen },
-                new List<Milestone>());
+                "becomes more logical.", 20, false, false, false, new List<Milestone>(), 
+                new List<Technology>() { sixteen }, 400, new List<IResource>());
             Technology twentyone = new Technology("twentyone", "Now with new arbitrary " +
-                "permissions!", false, false, 200, false, new List<Technology>(),
-                new List<Milestone>());
-            Technology twentytwo = new Technology("twentytwo", "Nothing special", false, false,
-                200, false, new List<Technology>(), new List<Milestone>());
-            Technology twentythree = new Technology("twentythree", "Bottleneck technology!", false,
-                false, 300, false, new List<Technology>() { fifteen, seventeen, eighteen, twenty, twentyone, twentytwo },
-                new List<Milestone>());
-            Technology twentyfour = new Technology("twentyfour", "An easily divided number.", false,
-                false, 400, false, new List<Technology>() { twentythree },
-                new List<Milestone>());
+                "permissions!", 21, false, false, false, new List<Milestone>(), new List<Technology>(),
+                400, new List<IResource>());
+            Technology twentytwo = new Technology("twentytwo", "Nothing special", 22, false, false,
+                false, new List<Milestone>(), new List<Technology>(), 400, new List<IResource>());
+            Technology twentythree = new Technology("twentythree", "Bottleneck technology!", 23, false,
+                false, false, new List<Milestone>(), new List<Technology>() { fifteen, seventeen, eighteen, twenty, twentyone, twentytwo },
+                1000, new List<IResource>());
+            Technology twentyfour = new Technology("twentyfour", "An easily divided number.", 24, false,
+                false, false, new List<Milestone>(), new List<Technology>() { twentythree }, 2000,
+                new List<IResource>());
             Technology twentyfive = new Technology("twentyfive", "Its square root is nothing special",
-                false, false, 500, false, new List<Technology>() { twentyfour },
-                new List<Milestone>());
+                25, false, false, false, new List<Milestone>(), new List<Technology>() { twentyfour },
+                4000, new List<IResource>());
             Technology twentysix = new Technology("twentysix", "Thirteen twice. Yup, I can do maths.",
-                false, false, 600, false, new List<Technology> { twentyfour },
-                new List<Milestone>());
+                26, false, false, false, new List<Milestone>(), new List<Technology> { twentyfour },
+                4000, new List<IResource>());
             Technology twentyseven = new Technology("twentyseven", "Taco fact: Tacos are healthier " +
-                "than crystal meth.", false, false, 700, false, 
-                new List<Technology>() { twentyfour, twentyfive, twentysix },
-                new List<Milestone>());
+                "than crystal meth.", 27, false, false, false, new List<Milestone>(),
+                new List<Technology>() { twentyfour, twentyfive, twentysix }, 8000,
+                new List<IResource>());
             Technology twentyeight = new Technology("twentyeight", "Taco fact: Tacos fall apart " +
-                "sometimes, but we still love them. Don't be so hard on yourself", false, false,
-                800, false, new List<Technology>() { twentysix },
-                new List<Milestone>());
+                "sometimes, but we still love them. Don't be so hard on yourself", 28, false, false,
+                false, new List<Milestone>(), new List<Technology>() { twentysix }, 8000,
+                new List<IResource>());
             Technology victory = new Technology("victory", "This is the highest technology in the " +
-                "mock research controller.", false, false, 1000, false, 
-                new List<Technology>() { twentyseven, twentyeight },
-                new List<Milestone>());
+                "mock research controller.", 29, false, false, false, new List<Milestone>(),
+                new List<Technology>() { twentyseven, twentyeight }, 18000,
+                new List<IResource>());
             
             List<Technology> technologies = new List<Technology>() { one, two, three, four, 
                 five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, 
