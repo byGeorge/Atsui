@@ -7,35 +7,41 @@ namespace Atsui.Controllers.DbControllers
     {
         public MockSwimmerDBController() { }
 
+        public int GetID()
+        {
+            return -1;
+        }
+
         public List<Technology> GetTechnologies()
         {
             Technology one = new Technology("one", "Is it a lonely number because it's" +
-                "unimaginative?", 0, true, true, true, new List<Milestone>(), new List<Technology>(),
+                "unimaginative?", 1, true, true, true, new List<Milestone>(), new List<Technology>(),
                 1, new List<IResource>());
             Technology two = new Technology("two", "The Twoth fairy is less horrifying " +
                 "than the threeth fairy",1, false, false, false, new List<Milestone>(),
                 new List<Technology>(), 10, new List<IResource>());
-            Technology three = new Technology("three", "Beware. BEWAAAARE!", 2, true,
+            Technology three = new Technology("three", "Beware. BEWAAAARE!", 3, true,
                 false, false, new List<Milestone>(), new List<Technology>(), 10, new List<IResource>());
             Technology four = new Technology("four", "We Go! by Hiroshi Kitadani is " +
-                "adorable.", 3, false, false, false, new List<Milestone>(),
+                "adorable.", 4, false, false, false, new List<Milestone>(),
                 new List<Technology>(), 10, new List<IResource>());
             Technology five = new Technology("five", "Even Eris would acknowledge that five " +
-                "is just another number.", 4, true, false, 1, false, new List<Technology>(),
-                new List<Milestone>());
+                "is just another number.", 5, false, false, false, new List<Milestone>(),
+                new List<Technology>(), 10, new List<IResource>());
             Technology six = new Technology("six", "Still just a number, even when repeated " +
-                "thrice.", true, false, 1, true, new List<Technology>(), new List<Milestone>());
+                "thrice.", 6, false, false, true, new List<Milestone>(), new List<Technology>(), 10, 
+                new List<IResource>());
             Technology seven = new Technology("seven", "Calling them deadly sins seems a bit " +
-                "overkill, if you ask me.", true, false, 1, false, new List<Technology>(),
-                new List<Milestone>());
+                "overkill, if you ask me.", 7, true, false, false, new List<Milestone>(),
+                new List<Technology>(), 10, new List<IResource>());
             Technology eight = new Technology("eight", "If you figure out how to fold a path " +
-                "this many times, you may receive enlightenment", true, false, 1, false,
-                new List<Technology>(), new List<Milestone>());
+                "this many times, you may receive enlightenment", 8, true, false, false,
+                new List<Milestone>(), new List<Technology>(), 10, new List<IResource>());
             Technology nine = new Technology("nine", "This is the last base technology. All " +
-                "others have parents", true, false, 0, false, new List<Technology>(),
-                new List<Milestone>());
-            Technology ten = new Technology("ten", "It's 2 in binary!", true, true,
-                10, true, new List<Technology>() { one }, new List<Milestone>());
+                "others have parents", 9, true, false, false, new List<Milestone>(),
+                new List<Technology>(), 10, new List<IResource>());
+            Technology ten = new Technology("ten", "It's 2 in binary!", 10, true, true,
+                true, new List<Milestone>(), new List<Technology>() { one }, 100, new List<IResource>());
             Technology eleven = new Technology("eleven", "Super cool kid", 
                 true, false, 10, false, new List<Technology>() { two, three },
                 new List<Milestone>());
