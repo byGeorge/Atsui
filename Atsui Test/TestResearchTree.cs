@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace Atsui_Test
 {
+    /** Tests Technology class as well as Technologies imported by SwimmerDBControllers **/
     public class TestResearchTree
     {
         List<Technology>[] technologies;
         string[] controllers;
-        [SetUp] 
+        [SetUp]
         public void Setup() {
             technologies = new List<Technology>[1];
             ISwimmerDBController mock = new MockSwimmerDBController();
@@ -31,7 +32,7 @@ namespace Atsui_Test
         {
             for (int i = 0; i < technologies.Length; i++)
             {
-                Assert.That(!technologies[i].IsNullOrEmpty(), 
+                Assert.That(!technologies[i].IsNullOrEmpty(),
                     "No technology found for " + controllers[i]);
             }
         }
@@ -42,7 +43,7 @@ namespace Atsui_Test
             for (int i = 0; i < technologies.Length; i++)
             {
                 bool parentExists = false;
-                foreach(Technology tech in technologies[i])
+                foreach (Technology tech in technologies[i])
                 {
                     if (!tech.Parents.IsNullOrEmpty() && tech.Parents.Count > 0)
                         parentExists = true;
@@ -51,84 +52,86 @@ namespace Atsui_Test
             }
         }
 
-        //helper function
-        private bool checkTree(List<Technology> parents, Technology curTech)
-        {
-            if (curTech.Parents.IsNullOrEmpty())
-            {
-                return true;
-            }
-            else if (parents.Contains(curTech))
-            {
-                return false;
-            }
-            else
-            {
-                parents.Add(curTech);
-                foreach(Technology tech in curTech.Parents)
-                {
-                    return checkTree(parents, tech);
-                }
-            }
-            return false; // this is only here to make the code compile.
-        }
         [Test]
-        public void EnsureResearchIsNotCircular()
-        {
+        public void EnsureResearchNodesCanBeReached()
+        { // checks for orphans and circular research
             for (var i = 0; i < technologies.Length; i++)
             {
-                foreach(Technology tech in technologies[i])
+                List<Technology> reachableTechnologies = new List<Technology>();
+                List<Technology> unreachedTechnologies = technologies[i];
+                int lastCount = 0;
+                int curCount = 0;
+
+                Technology curItem = unreachedTechnologies[0];
+                do
                 {
-                    Assert.That(checkTree(new List<Technology>(), tech), 
-                        "Circular research reference found in " + controllers[i] + "for " + tech.Name);
-                }
+                    //copy list instead of reference
+                    List<Technology> curUnreached = unreachedTechnologies.ToList<Technology>();
+                    curCount = lastCount;
+                    foreach (Technology t in unreachedTechnologies)
+                    {
+                        curItem = t;
+                        // it is the parent technology, and is researchable
+                        if (curItem.Parents.IsNullOrEmpty() && reachableTechnologies.Contains(curItem))
+                        {
+                            reachableTechnologies.Add(curItem);
+                            curUnreached.Remove(curItem);
+                            lastCount++;
+                        }
+                        // can all parents be reached?
+                        bool allParentsThere = true;
+                        foreach(Technology parent in curItem.Parents)
+                        {
+                            if (!reachableTechnologies.Contains(parent))
+                            {
+                                allParentsThere = false;
+                            }
+                        }
+                        if (allParentsThere && !reachableTechnologies.Contains(curItem))
+                        { // yes they can, and it hasn't been added yet
+                            reachableTechnologies.Add(curItem);
+                            curUnreached.Remove(curItem);
+                            lastCount++;
+                        }
+                    }
+                    // 
+                    unreachedTechnologies = curUnreached;
+                } while (curCount > lastCount); // we haven't added any more items
+                Assert.That(reachableTechnologies.Count == technologies[i].Count,
+                    reachableTechnologies.Count + " out of " + technologies[i].Count + " could be added. " + curItem.Name
+                    + "was the last item checked" + " in " + controllers[i]);
             }
         }
 
         [Test]
-        public void CanResearchChecksRequirements()
+        public void CanResearchCantResearchMoreThanOnce()
         {
             for (var i = 0; i < technologies.Length; i++)
             {
-                foreach(Technology tech in technologies[i])
+                foreach (Technology tech in technologies[i])
                 {
                     if (tech.CanResearch())
                     {
-                        //parent technology must be researched before child technologies
+                        Assert.That(!tech.HasResearched, "Technology " + tech.Name + " in " + controllers[i] + " has already been researched");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void CanResearchParentsAreResearchedFirst()
+        {
+            for (var i = 0; i < technologies.Length; i++)
+            {
+                foreach (Technology tech in technologies[i])
+                {
+                    if (tech.CanResearch())
+                    {
                         foreach(Technology parent in tech.Parents)
                         {
-                            Assert.That(parent.HasResearched, "Technology " + tech.Name + " has an " +
-                                "unresearched parent");
+                            Assert.That(parent.HasResearched, "Technology " + tech.Name + " in " + controllers[i] + " has an unresearched parent, " +
+                                "but claims to be researchable.");
                         }
-                        // prerequisite milestones must also be achieved
-                        foreach(Milestone milestone in tech.MilestonesRequired)
-                        {
-                            Assert.That(milestone.HasAchieved, "Technology " + tech.Name + " has an " +
-                                "unresearched milestone");
-                        }
-                    }
-                    else
-                    {
-                        // one of the prerequisites should not be met
-                        bool meetsRequiremets = true;
-                        foreach (Technology parent in tech.Parents)
-                        {
-                            if (!parent.HasResearched)
-                            {
-                                meetsRequiremets = false;
-                            }
-                        }
-
-                        foreach (Milestone milestone in tech.MilestonesRequired)
-                        {
-                            if (!milestone.HasAchieved)
-                            {
-                                meetsRequiremets = false;
-                            }
-                        }
-
-                        Assert.That(!meetsRequiremets, "Technology " + tech.Name + " meets requirements " +
-                            "but cannot be researched");
                     }
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using Atsui.Models;
 using Atsui.Models.Resources;
+using Humanizer.Localisation;
 
 namespace Atsui.Controllers.DbControllers
 {
@@ -14,6 +15,7 @@ namespace Atsui.Controllers.DbControllers
 
         public List<Technology> GetTechnologies()
         {
+            // well-behaved code for mock development
             Technology one = new Technology("one", "Is it a lonely number because it's" +
                 "unimaginative?", 1, true, true, true, new List<Milestone>(), new List<Technology>(),
                 1, new List<IResource>());
@@ -102,11 +104,23 @@ namespace Atsui.Controllers.DbControllers
                 "mock research controller.", 29, false, false, false, new List<Milestone>(),
                 new List<Technology>() { twentyseven, twentyeight }, 18000,
                 new List<IResource>());
-            
-            List<Technology> technologies = new List<Technology>() { one, two, three, four, 
-                five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, 
+            List<Technology> technologies = new List<Technology>() { one, two, three, four,
+                five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen,
                 fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twentyone, twentytwo,
                 twentythree, twentyfour, twentyfive, twentysix, twentyseven, twentyeight, victory };
+
+            // ill-behaved code for making tests fail. Used only when tests are modified or created
+            /**List<Technology> existingParent = new List<Technology>();
+            List<Milestone> impossibleMilestone = new List<Milestone>();
+            List<IResource> impossibleResources = new List<IResource>();
+            Technology circular1 = new Technology("circular1", "This should make tests fail.", 1, false, false, false,
+                impossibleMilestone, existingParent, 1, impossibleResources);
+            Technology circular2 = new Technology("circular2", "Used for testing tests. How meta!", 1, false, false, false,
+                impossibleMilestone, new List<Technology>() { circular1 }, 1, impossibleResources);
+            existingParent.Add(circular2);
+            technologies.Add(circular1);
+            technologies.Add(circular2);**/
+
             return technologies;
         }
     }

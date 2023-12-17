@@ -35,7 +35,15 @@ namespace Atsui.Models
 
         public bool CanResearch()
         {
-            bool canResearch = false;
+            bool canResearch = true;
+            // no reinventing the wheel here
+            if (HasResearched)
+                canResearch = false;
+            foreach (Technology parent in Parents)
+            {
+                if (!parent.HasResearched)
+                    canResearch = false;
+            }
             return canResearch;
         }
     }
