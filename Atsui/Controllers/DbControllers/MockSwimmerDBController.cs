@@ -6,11 +6,43 @@ namespace Atsui.Controllers.DbControllers
 {
     public class MockSwimmerDBController : ISwimmerDBController
     {
-        public MockSwimmerDBController() { }
+        private List<Swimmer> swimmers;
+        public MockSwimmerDBController() {
+            swimmers = new List<Swimmer>()
+            {
+                new Swimmer("Testy 1", "Test swimmer 0", 0),
+                new Swimmer("Testy 2", "Test swimmer 1", 1),
+                new Swimmer("Testy 3", "Test swimmer 2", 2),
+                new Swimmer("Testy 4", "Test swimmer 3", 3),
+                new Swimmer("Testy 5", "Test swimmer 4", 4),
+                new Swimmer("Testy 6", "Test swimmer 5", 5),
+                new Swimmer("Testy 7", "Test swimmer 6", 6),
+                new Swimmer("Testy 8", "Test swimmer 7", 7),
+                new Swimmer("Testy 9", "Test swimmer 8", 8)
+            };
+        }
 
-        public int GetID()
+        public int CreateSwimmer(Swimmer swimmer)
         {
-            return -1;
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteSwimmer(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Swimmer GetSwimmer(int id)
+        {
+            foreach(Swimmer swimmer in  swimmers)
+            {
+                if (swimmer.ID == id)
+                {
+                    return swimmer;
+                }
+            }
+            // not found, return null
+            return null;
         }
 
         public List<Technology> GetTechnologies()

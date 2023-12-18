@@ -6,17 +6,16 @@ namespace Atsui.Models
     {
         public string Name { get; }
         public string Description { get; set; }
+        // single digit Swimmer IDs are reserved for testing
         public int ID { get; }
-        public ISwimmerDBController DBController { get; }
         public int StartTime { get; }
         public List<World> Worlds { get; }
-        public Swimmer(string name, string description, ISwimmerDBController dBController)
+        public Swimmer(string name, string description, int id)
         {
 
             Name = name;
             Description = description; 
-            ID = dBController.GetID();
-            DBController = dBController;
+            ID = id;
             StartTime = GameLoop.GetGameTimeElapsed();
             Worlds = new List<World>();
         }
