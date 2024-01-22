@@ -50,10 +50,20 @@ namespace Atsui_Test
         public void GameTimeElapses()
         {
             GameLoop.Start();
-            int t1 = GameLoop.GetGameTimeElapsed();
+            TimeSpan t1 = GameLoop.GetTotalGameTime();
             Thread.Sleep(1000);
-            int t2 = GameLoop.GetGameTimeElapsed();
+            TimeSpan t2 = GameLoop.GetTotalGameTime();
             Assert.That(t1 < t2, "Game time has not passed: " + t1 + " is not less than " + t2);
+        }
+
+        [Test]
+        public void RunningTimeInitiallyMatchesGameTime()
+        {
+            GameLoop.Start();
+            Thread.Sleep(1000);
+            TimeSpan totalTime = GameLoop.GetTotalGameTime();
+            TimeSpan runningTime = GameLoop.GetTotalRunningTime();
+            Assert.That(totalTime == runningTime, "Total time should match running time. " + totalTime.Milliseconds + " is not " + runningTime.Milliseconds);
         }
 
         [Test]
@@ -62,10 +72,10 @@ namespace Atsui_Test
             GameLoop.Start();
             Assert.That(GameLoop.Pause(), "Pause() did not return true");
             Thread.Sleep(1000);
-            int t1 = GameLoop.GetGameTimeElapsed();
+            TimeSpan t1 = GameLoop.GetTotalRunningTime();
             Thread.Sleep(1000);
-            int t2 = GameLoop.GetGameTimeElapsed();
-            Assert.That(t1 == t2, "Game has not paused, " + t1 + " does not equal " + t2);
+            TimeSpan t2 = GameLoop.GetTotalRunningTime();
+            Assert.That(t1 == t2, "Game has not paused, " + t1.Milliseconds + " does not equal " + t2.Milliseconds);
         }
 
         [Test]
@@ -74,11 +84,23 @@ namespace Atsui_Test
             GameLoop.Start();
             GameLoop.Pause();
             Thread.Sleep(1000);
-            int t1 = GameLoop.GetGameTimeElapsed();
+            TimeSpan t1 = GameLoop.GetTotalRunningTime();
             Assert.That(GameLoop.Resume(), "Resume() did not return true");
             Thread.Sleep(1000);
-            int t2 = GameLoop.GetGameTimeElapsed();
-            Assert.That(t1 < t2, "Game has not resumed " + t1 + " is not less than " + t2);
+            TimeSpan t2 = GameLoop.GetTotalRunningTime();
+            Assert.That(t1 < t2, "Game has not resumed " + t1.Milliseconds + " is not less than " + t2.Milliseconds);
+        }
+
+        [Test]
+        public void TotalGameTimeRunsWhenPaused()
+        {
+            GameLoop.Start();
+            GameLoop.Pause();
+            Thread.Sleep(1000);
+            TimeSpan totalTime = GameLoop.GetTotalGameTime();
+            TimeSpan runningTime = GameLoop.GetTotalRunningTime();
+            Assert.That(totalTime > runningTime, 
+                "Total time should be grater than running time. Total: " + totalTime.Milliseconds + ", Running: " + runningTime.Milliseconds);
         }
     }
 }

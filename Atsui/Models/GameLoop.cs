@@ -2,8 +2,9 @@
 {
     public static class GameLoop
     {
-        private static int _gameTimeElapsed = 0;
-        private static int _loopTime = 6;
+        private static TimeSpan _totalGameTime;
+        private static TimeSpan _runningTime;
+        private static TimeSpan _loopTime = new TimeSpan(0,0,0,0,6);
         // States: 0 = stopped, 1 = running, 2 = starting, 3 = stopping, 4 = never started, 5 = paused
         public static int state = 4;
 
@@ -15,10 +16,26 @@
                 {
                     state = 1;
                 }
+                if (state == 5)
+                {
+                    do
+                    {
+                        await Task.Delay(_loopTime);
+                        _totalGameTime = _totalGameTime + _loopTime;
+                    } while (state == 5) ;
+                }
                 while (state == 1)// running
                 {
-                    await Task.Delay(_loopTime);
-                    _gameTimeElapsed += _loopTime;
+                    DateTime loopStart = DateTime.UtcNow;
+                    Update();
+                    Render();
+                    TimeSpan elapsed = DateTime.UtcNow - loopStart;
+                    TimeSpan waitTime = _loopTime - elapsed;
+                    if (waitTime < TimeSpan.Zero)
+                        waitTime = TimeSpan.Zero;
+                    await Task.Delay(waitTime + _loopTime);
+                    _totalGameTime = _totalGameTime + _loopTime;
+                    _runningTime = _runningTime + _loopTime;
                 }
                 if (state == 3) // stopping
                 {
@@ -27,9 +44,14 @@
             } while (state != 0);
         }
 
-        public static int GetGameTimeElapsed()
+        public static TimeSpan GetTotalGameTime()
         {
-            return _gameTimeElapsed;
+            return _totalGameTime;
+        }
+
+        public static TimeSpan GetTotalRunningTime()
+        {
+            return _runningTime;
         }
 
         public static String GetState()
@@ -59,10 +81,21 @@
             }
         }
 
+        public static void Load()
+        {
+
+        }
+
         public static bool Pause()
         {
             state = 5;
             return true;
+        }
+
+        public static void Render()
+        {
+            //Update the UI
+            /** crickets **/
         }
 
         public static bool Resume()
@@ -75,6 +108,9 @@
         {
             state = 2;
             // TODO: startup code goes here
+            _totalGameTime = new TimeSpan();
+            _runningTime= new TimeSpan();
+            Load();
             gameLoop();
             return true;
         }
@@ -93,6 +129,12 @@
             // wait for loop to finish
             Thread.Sleep(_loopTime * 4);
             // TODO: async teardown code goes here
+        }
+
+        public static void Update()
+        {
+            // Update the game state here. 
+            /** crickets**/
         }
     }
 }

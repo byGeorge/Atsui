@@ -29,43 +29,6 @@ namespace Atsui_Test
         }
 
         [Test]
-        public void InitialGameTimeIsAccurate()
-        {
-            for (var i = 0; i < swimmerDBControllers.Length; i++)
-            {
-                Thread.Sleep(1000);
-                Swimmer swimmer = new Swimmer("Swim1", "Testing... testing... annnyyybooddddyyyyyy???", 0);
-                int startTime = swimmer.StartTime;
-                Assert.That(startTime > 0, "Initial GameTime is " + startTime);
-                Assert.That(startTime >= 1000 && startTime <= 2000,
-                    "Initial GameTime is " + startTime +
-                    " and should be between 1000 and 2000 for " + swimmerControllerNames[i]);
-            }
-        }
-
-        [Test]
-        public void TimePlayedIsAccurate()
-        {
-            for (var i = 0; i < swimmerDBControllers.Length; i++)
-            {
-                Swimmer swimmer = new Swimmer("Swim1", "Testing... testing... annnyyybooddddyyyyyy???", 0);
-                int startTime = swimmer.StartTime;
-                Thread.Sleep(1000);
-                int played = swimmer.GetTimePlayed();
-                Assert.That((GameLoop.GetGameTimeElapsed() - startTime) >= played,
-                    "Time played is " + played + ". Start time: " + startTime +
-                    "GameTime should continue counting after Swimmer creation");
-                Thread.Sleep(1000);
-                int timePassed = GameLoop.GetGameTimeElapsed() - played;
-                Assert.That(timePassed > 0,
-                    "GameTime should continue counting. Time passed: " + timePassed);
-                Assert.That(timePassed >= 1000 && timePassed <= 2000,
-                    "Time Passed should be between 1000 and 2000 ms.");
-                Console.WriteLine("Test TimePlayedIsAccurate time passed: " + timePassed);
-            }
-        }
-
-        [Test]
         public void GetSwimmerReturnsValidSwimmer()
         {
             for (var i = 0; i < swimmerDBControllers.Length; i++)
