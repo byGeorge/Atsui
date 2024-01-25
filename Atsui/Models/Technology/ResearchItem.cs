@@ -1,23 +1,24 @@
 ﻿using Atsui.Models.Resources;
 
-namespace Atsui.Models
+namespace Atsui.Models.Technology
 {
-    public class Technology : IItem
+    public class ResearchItem : IItem
     {
         public string Name { get; }
         public string Description { get; }
         public int ID { get; }
         public int ItemType { get; }
         public int OwnerID { get; }
-        public bool BeingUsed { get; }
-        public bool HasResearched { get; }
-        public bool IsArchived { get; }
+        public bool BeingUsed { get; set; }
+        public bool HasResearched { get; set; }
+        public bool IsArchived { get; set; }
+        public bool IsResearching { get; set; }
         public List<Milestone> MilestonesRequired { get; }
-        public List<Technology> Parents { get; }
-        public int ResearchTime { get; }
+        public List<ResearchItem> Parents { get; }
+        public int ResearchTime { get; } // Milliseconds
         public List<IResource> ResourcesRequired { get; }
-        public Technology(string name, string description, int id, bool beingUsed, bool hasResearched, 
-            bool isArchived, List<Milestone> milestonesRequired, List<Technology> parents, int researchTime, 
+        public ResearchItem(string name, string description, int id, bool beingUsed, bool hasResearched,
+            bool isArchived, bool isResearching, List<Milestone> milestonesRequired, List<ResearchItem> parents, int researchTime,
             List<IResource> resourcesRequired)
         {
             Name = name;
@@ -27,6 +28,7 @@ namespace Atsui.Models
             BeingUsed = beingUsed;
             HasResearched = hasResearched;
             IsArchived = isArchived;
+            IsResearching = isResearching;
             MilestonesRequired = milestonesRequired;
             Parents = parents;
             ResearchTime = researchTime;
@@ -39,7 +41,7 @@ namespace Atsui.Models
             // no reinventing the wheel here
             if (HasResearched)
                 canResearch = false;
-            foreach (Technology parent in Parents)
+            foreach (ResearchItem parent in Parents)
             {
                 if (!parent.HasResearched)
                     canResearch = false;

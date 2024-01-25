@@ -1,4 +1,5 @@
 ﻿using Atsui.Models;
+using Atsui.Models.Technology;
 
 namespace Atsui.Controllers.DbControllers
 {
@@ -7,6 +8,6 @@ namespace Atsui.Controllers.DbControllers
         public Swimmer GetSwimmer(int id);
         public int CreateSwimmer(Swimmer swimmer);
         public bool DeleteSwimmer(int id);
-        public List<Technology> GetTechnologies();
+        public List<ResearchItem> GetTechnologies();
     }
 }
