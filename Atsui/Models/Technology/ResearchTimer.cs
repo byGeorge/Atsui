@@ -22,9 +22,17 @@ namespace Atsui.Models.Technology
             Run();
         }
 
-        public void Stop() { 
+        internal void Stop() { 
             _timer.Stop();
-            Status = 3;
+            if (_timer.ElapsedMilliseconds >= Item.ResearchTime)
+            {
+                Status = 2;
+                Item.HasResearched = true;
+            }
+            else
+            {
+                Status = 3;
+            }
         }
 
         public double GetPercentageComplete()
@@ -46,8 +54,8 @@ namespace Atsui.Models.Technology
                 await Task.Delay(_tickDelay);
 
             } while (_timer.ElapsedMilliseconds <= Item.ResearchTime);
+            Item.HasResearched = true;
             Stop();
-            Status = 2;
         }
 
         public string GetStatus()

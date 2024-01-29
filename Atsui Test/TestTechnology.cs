@@ -1,4 +1,5 @@
-﻿using Atsui.Controllers.DbControllers;
+﻿using Atsui.Controllers.Backend;
+using Atsui.Controllers.DbControllers;
 using Atsui.Models.Technology;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
@@ -13,15 +14,17 @@ namespace Atsui_Test
     /** Tests Technology class as well as Technologies imported by SwimmerDBControllers **/
     public class TestTechnology
     {
+        string[] dbControllers;
         List<ResearchItem>[] technologies;
-        string[] controllers;
+        TechnologyController technologyController;
         [SetUp]
         public void Setup() {
             technologies = new List<ResearchItem>[1];
             ISwimmerDBController mock = new MockSwimmerDBController();
             technologies[0] = mock.GetTechnologies();
-            controllers = new string[1];
-            controllers[0] = "MockResearchController";
+            dbControllers = new string[1];
+            dbControllers[0] = "MockResearchController";
+            technologyController = new TechnologyController();
         }
 
         [TearDown]
@@ -33,7 +36,7 @@ namespace Atsui_Test
             for (int i = 0; i < technologies.Length; i++)
             {
                 Assert.That(!technologies[i].IsNullOrEmpty(),
-                    "No technology found for " + controllers[i]);
+                    "No technology found for " + dbControllers[i]);
             }
         }
 
@@ -48,7 +51,7 @@ namespace Atsui_Test
                     if (!tech.Parents.IsNullOrEmpty() && tech.Parents.Count > 0)
                         parentExists = true;
                 }
-                Assert.That(parentExists, "No parent exists in " + controllers[i]);
+                Assert.That(parentExists, "No parent exists in " + dbControllers[i]);
             }
         }
 
@@ -99,7 +102,7 @@ namespace Atsui_Test
                 } while (curCount > lastCount); // we haven't added any more items
                 Assert.That(reachableTechnologies.Count == technologies[i].Count,
                     reachableTechnologies.Count + " out of " + technologies[i].Count + " could be added. " + curItem.Name
-                    + "was the last item checked" + " in " + controllers[i]);
+                    + "was the last item checked" + " in " + dbControllers[i]);
             }
         }
 
@@ -112,7 +115,7 @@ namespace Atsui_Test
                 {
                     if (tech.CanResearch())
                     {
-                        Assert.That(!tech.HasResearched, "Technology " + tech.Name + " in " + controllers[i] + " has already been researched");
+                        Assert.That(!tech.HasResearched, "Technology " + tech.Name + " in " + dbControllers[i] + " has already been researched");
                     }
                 }
             }
@@ -129,7 +132,7 @@ namespace Atsui_Test
                     {
                         foreach(ResearchItem parent in tech.Parents)
                         {
-                            Assert.That(parent.HasResearched, "Technology " + tech.Name + " in " + controllers[i] + " has an unresearched parent, " +
+                            Assert.That(parent.HasResearched, "Technology " + tech.Name + " in " + dbControllers[i] + " has an unresearched parent, " +
                                 "but claims to be researchable.");
                         }
                     }
@@ -137,25 +140,8 @@ namespace Atsui_Test
             }
         }
 
-        // only mock db required, testing functionality of technologycontroller and researchtimer
-        [Test]
-        public void ResearchStarts()
-        {
-            ResearchItem researchable = null;
-            for (var i = 0; i < technologies[0].Count; i++)
-            {
-                if (technologies[0][i].CanResearch())
-                {
-                    researchable = technologies[0][i];
-                    break;
-                }
-            }
-            ResearchTimer timer = new ResearchTimer(researchable);
-            timer.Start();
-            Assert.That(timer.GetStatus() == "Running" || timer.GetStatus() == "Complete", 
-                "Research should be running or already completed, but was " + timer.GetStatus());
-        }
-
+        // only mock db required for testing functionality of technologycontroller and researchtimer
+        // begin researchtimer tests
         [Test]
         public void ResearchCompletes()
         {
@@ -168,8 +154,8 @@ namespace Atsui_Test
                     break;
                 }
             }
-            ResearchTimer timer = new ResearchTimer(researchable);
-            timer.Start();
+            technologyController.AddResearchToQueue(researchable);
+            ResearchTimer timer = technologyController.GetCurrentResearch();
             Thread.Sleep(researchable.ResearchTime);
             Assert.That(timer.GetStatus() == "Complete", "Research should be completed, but was " + timer.GetStatus());
         }
@@ -186,8 +172,8 @@ namespace Atsui_Test
                     break;
                 }
             }
-            ResearchTimer timer = new ResearchTimer(researchable);
-            timer.Start();
+            technologyController.AddResearchToQueue(researchable);
+            ResearchTimer timer = technologyController.GetCurrentResearch();
             Assert.That(timer.GetStatus() != "Complete", "Research should not complete instantly");
         }
 
@@ -203,16 +189,34 @@ namespace Atsui_Test
                     break;
                 }
             }
-            ResearchTimer timer = new ResearchTimer(researchable);
-            double percent = timer.GetPercentageComplete();
-            Assert.That(percent == 0, "Research should be at 0%, but is " + percent);
-            timer.Start();
+            double percent = 0;
+            technologyController.AddResearchToQueue(researchable);
             Thread.Sleep(researchable.ResearchTime / 2);
+            ResearchTimer timer = technologyController.GetCurrentResearch();
             percent = timer.GetPercentageComplete();
             Assert.That(percent >= 49 && percent <= 51, "Research should be at around 50%, but is " + percent + "% of " + researchable.ResearchTime + " ms");
             Thread.Sleep(researchable.ResearchTime / 2);
             percent = timer.GetPercentageComplete();
             Assert.That(percent == 100, "Research should be at 100%, but is " + percent);
+        }
+
+
+        // begin technologycontroller tests
+        [Test]
+        public void TechnologyControllerStartsResearch()
+        {
+            ResearchItem researchable = null;
+            for (var i = 0; i < technologies[0].Count; i++)
+            {
+                if (technologies[0][i].CanResearch())
+                {
+                    researchable = technologies[0][i];
+                    break;
+                }
+            }
+            Assert.That(technologyController.AddResearchToQueue(researchable), "Technology did not get added to queue.");
+            Thread.Sleep(researchable.ResearchTime + 100);
+            Assert.That(researchable.HasResearched, "Technology was added to queue but did not get researched.");
         }
     }
 }
